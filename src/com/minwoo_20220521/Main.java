@@ -98,7 +98,7 @@ public class Main {
         System.out.print("내용(exit:입력종료): ");
 
         while (true) {
-            String content = scanner.nextLine();
+            String content = scanner.next();
 
             if (content.equals("exit")) {
                 break;
@@ -117,33 +117,97 @@ public class Main {
     public static void reading() throws IOException {
 
         System.out.println("[메모읽기]");
+
+        // 파일 리스트 읽어오기 및 파일 선택
+        int choice = readList();
+
+        // 예외 처리
+        if(choice == 0) {
+            return;
+        }
+
+        FileReader reader = new FileReader("d:\\minwoo\\" + choice + ".txt");
+        BufferedReader buf = new BufferedReader(reader);
+
+        String temp = buf.readLine();
+
+        String[] split = temp.split(",");
+
+        System.out.println("이름   : " + split[0]);
+        System.out.println("중요도 : " + split[1]);
+        System.out.println("날짜   : " + split[2]);
+        System.out.println("내용   : " + split[3]);
+
+        while ((temp = buf.readLine()) != null) {
+            System.out.println("         " + temp);
+        }
+
+    }
+
+    // 파일 삭제
+    public static void delete() throws IOException {
+
+        System.out.println("[메모삭제]");
+
+        // 파일 리스트 읽어오기 및 파일 선택
+        int choice = readList();
+
+        // 예외 처리
+        if(choice == 0) {
+            return;
+        }
+
+        File file = new File("d:\\minwoo\\" + choice + ".txt");
+
+        // 열려있는 파일 닫은 후 삭제
+        System.gc();
+        boolean fileDeleted = file.delete();
+
+        if(fileDeleted) {
+            System.out.println("파일을 삭제하였습니다.");
+        } else {
+            System.out.println("파일 삭제를 실패하였습니다.");
+        }
+
+    }
+
+    // 파일 리스트 읽어오기 및 파일 선택
+    public static int readList() throws IOException {
+
         System.out.println("[번호]     [이름]     [내용(일부분)]");
 
         File dir = new File("d:\\minwoo");
         String[] filenames = dir.list();
 
-
-
         for (int number = 1; number <= filenames.length; number++) {
 
             FileReader reader = new FileReader("d:\\minwoo\\" + number + ".txt");
             BufferedReader buf = new BufferedReader(reader);
-            String temp = "";
-            while ((temp = buf.readLine()) != null) {
 
-                String[] split = temp.split(",");
+            String temp = buf.readLine();
 
-                if (!split[0].equals("")) {
+            String[] split = temp.split(",");
 
-                    System.out.println(number + "          " + split[0] + " ");
-                }
-            }
+            System.out.println(number + "          " + split[0] + "     " + split[3]);
 
         }
-    }
 
-    public static void delete() {
+        System.out.print("파일 번호 선택: ");
 
+        try {
+            int choice = scanner.nextInt();
+
+            if(choice <= 0 || filenames.length < choice) {
+                throw new Exception();
+            }
+
+            return choice;
+
+        } catch (Exception e) {
+            System.out.println("없는 파일 입니다.");
+        }
+
+        return 0;
     }
 
 }
