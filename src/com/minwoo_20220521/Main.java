@@ -49,6 +49,14 @@ public class Main {
     // 1. 메모 쓰기
     public static void writing() throws IOException {
 
+        File dir = new File("d:\\minwoo");
+        String[] filenames = dir.list();
+
+        if(filenames == null) {
+            System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
+            return;
+        }
+
         System.out.println("[메모쓰기]");
 
         System.out.print("이름: ");
@@ -61,10 +69,6 @@ public class Main {
             System.out.println("중요도를 대문자 A, B, C 중 하나로 다시 입력해 주세요.");
             return;
         }
-
-        // 파일 만들기
-        File dir = new File("d:\\minwoo");
-        String[] filenames = dir.list();
 
         String lastfile = filenames.length != 0 ? filenames[filenames.length - 1] : "0.txt";
 
@@ -178,6 +182,11 @@ public class Main {
 
         File dir = new File("d:\\minwoo");
         String[] filenames = dir.list();
+
+        if(filenames == null) {
+            System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
+            return 0;
+        }
 
         for (int number = 1; number <= filenames.length; number++) {
 
