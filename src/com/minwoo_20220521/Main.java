@@ -75,12 +75,6 @@ public class Main {
 
         File file = new File("d:\\minwoo\\"+ (saveFileName + 1) + ".txt");
 
-        // 파일 존재여부 체크 및 생성
-        if (!file.createNewFile()) {
-            System.out.println("이미 존재하는 파일입니다 다른이름을 입력해주세요.");
-            return;
-        }
-
         // 파일 쓰기
         FileWriter fw = new FileWriter(file);
         PrintWriter writer = new PrintWriter(fw);
