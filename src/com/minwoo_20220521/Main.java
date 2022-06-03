@@ -53,6 +53,7 @@ public class Main {
 
         if(filenames == null) {
             System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
+            return;
         }
 
         System.out.println("[메모쓰기]");
