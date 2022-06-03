@@ -52,8 +52,9 @@ public class Main {
         String[] filenames = dir.list();
 
         if(filenames == null) {
-            System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
-            return;
+            dir.mkdir();
+            System.out.println("D 드라이브에 minwoo 폴더를 생성했습니다.");
+            filenames = dir.list();
         }
 
         System.out.println("[메모쓰기]");
@@ -168,7 +169,7 @@ public class Main {
             // 메모 리스트 읽어오기
             String[] filenames = fileListRead();
 
-            if(filenames == null) {
+            if(filenames.length == 0) {
                 return;
             }
 
@@ -192,7 +193,7 @@ public class Main {
         // 메모 리스트 읽어오기
         String[] filenames = fileListRead();
 
-        if(filenames == null) {
+        if(filenames.length == 0) {
             return 0;
         }
 
@@ -240,13 +241,19 @@ public class Main {
         String[] filenames = dir.list();
 
         if(filenames == null) {
-            System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
-        } else if (filenames.length == 0) {
-            System.out.println("메모가 없습니다, 메모를 생성해 주세요");
-        } else {
-            return filenames;
+            dir.mkdir();
+            System.out.println("D: 드라이브에 minwoo 폴더를 생성했습니다.");
+            filenames = dir.list();
+
         }
-        return null;
+
+        if (filenames.length == 0) {
+            System.out.println("메모가 없습니다, 메모를 먼저 생성해 주세요");
+
+        }
+
+        return filenames;
+
     }
 
 }
