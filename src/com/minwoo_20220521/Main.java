@@ -24,7 +24,6 @@ public class Main {
 
              String choice = scanner.next();
 
-
              if (choice.equals("1")) {
                  writing();
 
@@ -54,7 +53,6 @@ public class Main {
 
         if(filenames == null) {
             System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
-            return;
         }
 
         System.out.println("[메모쓰기]");
@@ -101,13 +99,13 @@ public class Main {
         // 내용 입력받기 및 쓰기
         System.out.print("내용(exit:입력종료): ");
 
+        // exit가 나올때까지 내용 넣기
         while (true) {
             String content = scanner.next();
 
             if (content.equals("exit")) {
                 break;
             } else {
-                // 내용 넣기
                 writer.println(content);
             }
         }
@@ -130,6 +128,7 @@ public class Main {
             return;
         }
 
+        // 선택한 파일 상세보기
         FileReader reader = new FileReader("d:\\minwoo\\" + choice + ".txt");
         BufferedReader buf = new BufferedReader(reader);
 
@@ -146,6 +145,8 @@ public class Main {
             System.out.println("         " + temp);
         }
 
+        reader.close();
+        buf.close();
     }
 
     // 파일 삭제
@@ -161,14 +162,27 @@ public class Main {
             return;
         }
 
+        // 선택한 파일 삭제
         File file = new File("d:\\minwoo\\" + choice + ".txt");
 
-        // 열려있는 파일 닫은 후 삭제
         System.gc();
-        boolean fileDeleted = file.delete();
+        if(file.delete()) {
 
-        if(fileDeleted) {
             System.out.println("파일을 삭제하였습니다.");
+
+            // 메모 리스트 읽어오기
+            String[] filenames = fileListRead();
+
+            if(filenames == null) {
+                return;
+            }
+
+            for(int originallName = choice + 1; originallName <= (filenames.length + 1); originallName++) {
+
+                File renameFile = new File("d:\\minwoo\\" + originallName + ".txt");
+                renameFile.renameTo(new File("d:\\minwoo\\" + (originallName - 1) + ".txt"));
+            }
+
         } else {
             System.out.println("파일 삭제를 실패하였습니다.");
         }
@@ -180,11 +194,10 @@ public class Main {
 
         System.out.println("[번호]     [이름]     [내용(일부분)]");
 
-        File dir = new File("d:\\minwoo");
-        String[] filenames = dir.list();
+        // 메모 리스트 읽어오기
+        String[] filenames = fileListRead();
 
         if(filenames == null) {
-            System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
             return 0;
         }
 
@@ -198,6 +211,12 @@ public class Main {
             String[] split = temp.split(",");
 
             System.out.println(number + "          " + split[0] + "     " + split[3]);
+
+            // 마지막까지 읽고 닫아주기
+            if(number == filenames.length) {
+                reader.close();
+                buf.close();
+            }
 
         }
 
@@ -217,6 +236,22 @@ public class Main {
         }
 
         return 0;
+
+    }
+
+    // 메모 리스트 읽어오기
+    public static String[] fileListRead() {
+        File dir = new File("d:\\minwoo");
+        String[] filenames = dir.list();
+
+        if(filenames == null) {
+            System.out.println("D 드라이브에 minwoo 폴더를 만들어주세요");
+        } else if (filenames.length == 0) {
+            System.out.println("메모가 없습니다, 메모를 생성해 주세요");
+        } else {
+            return filenames;
+        }
+        return null;
     }
 
 }
